@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from src.api.routes import user_authentication
+from db import Sessionlocal
 import uvicorn
 
 

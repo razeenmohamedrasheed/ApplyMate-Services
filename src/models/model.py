@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Boolean, Integer, String, DateTime, func, ForeignKey, Enum, Date
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, declarative_base
 from db import Base
 import enum
 
+Base = declarative_base()
 
 # ------------------- Roles Table -------------------
 class Roles(Base):
@@ -11,7 +12,8 @@ class Roles(Base):
     role_id = Column(Integer, primary_key=True, index=True)
     user_role = Column(String(50), unique=True, nullable=False)
 
-    users = relationship("Users", back_populates="role")
+    candidates = relationship("Candidates", back_populates="role")
+    recruiters = relationship("Recruiters", back_populates="role")
 
 # ------------------- Gender Enum -------------------
 class GenderEnum(enum.Enum):
@@ -27,7 +29,7 @@ class Candidates(Base):
     username = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     dob = Column(Date, nullable=True)
-    contact = Column(Integer,unique=True, nullable=False)
+    contact = Column(String,unique=True, nullable=False)
     gender = Column(Enum(GenderEnum), nullable=True)
     resume = Column(String(255), nullable=True)  
     github_url = Column(String(255), nullable=True)
@@ -36,7 +38,7 @@ class Candidates(Base):
     has_experience = Column(Boolean, default=False)
     role_id = Column(Integer, ForeignKey("user_roles.role_id"), nullable=False)
 
-    role = relationship("Roles", back_populates="users")
+    role = relationship("Roles", back_populates="candidates")
 
 
 # ------------------- Recruiters Table -------------------
@@ -55,4 +57,4 @@ class Recruiters(Base):
     company_name = Column(String(255), nullable=False)
     role_id = Column(Integer, ForeignKey("user_roles.role_id"), nullable=False)
 
-    role = relationship("Roles", back_populates="users")
+    role = relationship("Roles", back_populates="recruiters")
