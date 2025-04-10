@@ -4,6 +4,7 @@ from src.schemas.registration import Register
 from src.utils.password_utils import Hash
 from sqlalchemy.orm import Session
 from src.models.model import Candidates
+from src.utils.email_utils import GenerateMail
 from db import get_db
 import json
 import os
@@ -44,7 +45,8 @@ async def candidate_registration(payload: str = Form(...),file: UploadFile = Fil
             has_experience = data.experienced,
             password= encrypt_password
         )
-        print(new_user)
+        email = data.email
+        GenerateMail.send_email(email)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
