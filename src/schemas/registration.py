@@ -5,9 +5,8 @@ class Register(BaseModel):
     email : str
     dob : str
     gender : str
-    resume : str
     contact : str
+    github : str
     linkedin:str
     password : str
     experienced: bool
-    role_id : int 
